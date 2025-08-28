@@ -6,4 +6,4 @@ It focuses on the core entities (👤 User, 🏠 Property, 📅 Booking, 💳 Pa
 
 ---
 
-![Airbnb Database ERD](./ERD/airbnb_erd.svg)  
+![Airbnb Database ERD](./airbnb_erd.svg)  
