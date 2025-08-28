@@ -5,3 +5,5 @@ This document provides a simple overview of the **Entity-Relationship Diagram (E
 It focuses on the core entities (👤 User, 🏠 Property, 📅 Booking, 💳 Payment, ⭐ Review, 💬 Message) and how they relate to each other.  
 
 ---
+
+![Airbnb Database ERD](./airbnb_erd.svg)  
