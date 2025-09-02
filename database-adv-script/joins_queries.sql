@@ -14,9 +14,11 @@ ON booking.user_id = users.user_id;
 SELECT * 
 FROM property 
 LEFT JOIN review 
-ON review.property_id = property.property_id;
+ON review.property_id = property.property_id
+ORDER BY property.created_at;
+
 
 SELECT *
 FROM users
-FULL JOIN booking
+FULL OUTER JOIN booking
 ON booking.user_id = users.user_id;
