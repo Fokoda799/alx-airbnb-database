@@ -6,7 +6,7 @@
 -- ================================================================
 
 -- Drop existing objects for a clean setup
-DROP TABLE IF EXISTS Message, Review, Payment, Booking, Property, "User" CASCADE;
+DROP TABLE IF EXISTS Message, Review, Payment, Booking, Property, users CASCADE;
 DROP TYPE IF EXISTS user_role, booking_status, payment_method;
 
 -- ================================================================
@@ -22,7 +22,7 @@ CREATE TYPE payment_method AS ENUM ('credit_card', 'paypal', 'stripe');
 -- ================================================================
 
 -- Users Table
-CREATE TABLE "User" (
+CREATE TABLE users (
     user_id UUID PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name  VARCHAR(50) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE "User" (
 -- Properties Table
 CREATE TABLE Property (
     property_id UUID PRIMARY KEY,
-    host_id UUID NOT NULL REFERENCES "User"(user_id) ON DELETE CASCADE,
+    host_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     name VARCHAR(150) NOT NULL,
     description TEXT,
     location VARCHAR(255) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE Property (
 CREATE TABLE Booking (
     booking_id UUID PRIMARY KEY,
     property_id UUID NOT NULL REFERENCES Property(property_id) ON DELETE CASCADE,
-    user_id UUID NOT NULL REFERENCES "User"(user_id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     start_date DATE NOT NULL,
     end_date   DATE NOT NULL,
     total_price DECIMAL(10,2) NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE Payment (
 CREATE TABLE Review (
     review_id UUID PRIMARY KEY,
     property_id UUID NOT NULL REFERENCES Property(property_id) ON DELETE CASCADE,
-    user_id UUID NOT NULL REFERENCES "User"(user_id) ON DELETE SET NULL,
+    user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE SET NULL,
     rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -79,8 +79,8 @@ CREATE TABLE Review (
 -- Messages Table
 CREATE TABLE Message (
     message_id UUID PRIMARY KEY,
-    sender_id UUID NOT NULL REFERENCES "User"(user_id) ON DELETE CASCADE,
-    recipient_id UUID NOT NULL REFERENCES "User"(user_id) ON DELETE CASCADE,
+    sender_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    recipient_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     message_body TEXT NOT NULL,
     sent_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -88,7 +88,7 @@ CREATE TABLE Message (
 -- ================================================================
 -- Step 3: Indexes
 -- ================================================================
-CREATE INDEX idx_user_email             ON "User"(email);
+CREATE INDEX idx_user_email             ON users(email);
 CREATE INDEX idx_property_host_id       ON Property(host_id);
 CREATE INDEX idx_booking_user_id        ON Booking(user_id);
 CREATE INDEX idx_booking_property_id    ON Booking(property_id);
