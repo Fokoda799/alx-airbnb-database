@@ -5,15 +5,13 @@
 -- for testing and development.
 -- ================================================================
 
--- This ensures that if you run the script multiple times, you won't
--- create duplicate data. The order is reversed from creation.
-
-DELETE FROM Message;
-DELETE FROM Review;
-DELETE FROM Payment;
-DELETE FROM Booking;
-DELETE FROM Property;
-DELETE FROM "User";
+-- Prevent duplicates
+DELETE FROM message;
+DELETE FROM review;
+DELETE FROM payment;
+DELETE FROM booking;
+DELETE FROM property;
+DELETE FROM users;
 
 -- ================================================================
 -- Users
@@ -29,7 +27,6 @@ VALUES
 -- ================================================================
 -- Properties
 -- ================================================================
--- (Note: replace host_id with actual UUIDs of hosts from above)
 INSERT INTO property (property_id, host_id, name, description, location, price_per_night)
 VALUES
   (gen_random_uuid(), (SELECT user_id FROM users WHERE email='alice@example.com'),
@@ -40,7 +37,6 @@ VALUES
 -- ================================================================
 -- Bookings
 -- ================================================================
--- (Note: replace user_id with guest UUIDs)
 INSERT INTO booking (booking_id, property_id, user_id, start_date, end_date, total_price, status)
 VALUES
   (gen_random_uuid(),
@@ -56,7 +52,6 @@ VALUES
 -- ================================================================
 -- Payments
 -- ================================================================
--- (Link payments to confirmed bookings only)
 INSERT INTO payment (payment_id, booking_id, amount, payment_method)
 VALUES
   (gen_random_uuid(),
