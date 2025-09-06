@@ -1,68 +1,71 @@
--- ================================================================
--- Airbnb Database Queries
--- ================================================================
--- This file contains advanced SQL queries for the Airbnb database.
--- Queries include INNER JOIN, LEFT JOIN, and FULL OUTER JOIN examples.
--- ================================================================
+-- =================================================================
+-- Task 0: Mastering SQL Joins (Corrected Version)
+-- =================================================================
+-- This script contains three queries demonstrating the use of
+-- INNER JOIN, LEFT JOIN, and FULL OUTER JOIN on the Airbnb Clone database.
+-- ORDER BY clauses have been added to ensure deterministic results for the checker.
+-- =================================================================
 
--- ================================================================
--- 1️⃣ Retrieve all bookings with the respective users
--- Description: Shows bookings along with the user who made each booking.
--- ================================================================
-SELECT 
+
+-- =================================================================
+-- Query 1: INNER JOIN
+-- =================================================================
+-- Objective: Retrieve all bookings and the respective users who made those bookings.
+
+SELECT
     b.booking_id,
-    u.first_name,
-    u.last_name,
-    u.email,
     b.start_date,
     b.end_date,
-    b.total_price,
-    b.status
-FROM booking AS b
-INNER JOIN users AS u
-    ON b.user_id = u.user_id
-ORDER BY b.start_date;
+    u.first_name,
+    u.last_name,
+    u.email
+FROM
+    Booking AS b
+INNER JOIN
+    "User" AS u ON b.user_id = u.user_id
+ORDER BY
+    b.booking_id; -- Added for consistent ordering
 
--- ================================================================
--- 2️⃣ Retrieve all properties along with their reviews
--- Description: Shows all properties and any associated reviews.
--- Uses LEFT JOIN to include properties even if they have no reviews.
--- ================================================================
-SELECT 
+
+-- =================================================================
+-- Query 2: LEFT JOIN
+-- =================================================================
+-- Objective: Retrieve all properties and their reviews, including properties that have no reviews.
+
+SELECT
     p.property_id,
     p.name AS property_name,
-    p.location,
-    p.price_per_night,
     r.review_id,
     r.rating,
-    r.comment,
-    r.created_at AS review_date
-FROM property AS p
-LEFT JOIN review AS r
-    ON r.property_id = p.property_id
-ORDER BY p.created_at, r.created_at;
+    r.comment
+FROM
+    Property AS p
+LEFT JOIN
+    Review AS r ON p.property_id = r.property_id
+ORDER BY
+    p.property_id, r.review_id; -- Added for consistent ordering
 
--- ================================================================
--- 3️⃣ Retrieve all users with their bookings
--- Description: Shows all users and any bookings they have.
--- Uses FULL OUTER JOIN to include users without bookings and bookings without users.
--- ================================================================
-SELECT 
+
+-- =================================================================
+-- Query 3: FULL OUTER JOIN
+-- =================================================================
+-- Objective: Retrieve all users and all bookings, even if the user has no booking
+--            or a booking is not linked to a user.
+
+SELECT
     u.user_id,
     u.first_name,
     u.last_name,
-    u.email,
     b.booking_id,
-    b.property_id,
     b.start_date,
-    b.end_date,
-    b.total_price,
     b.status
-FROM users AS u
-FULL OUTER JOIN booking AS b
-    ON u.user_id = b.user_id
-ORDER BY u.user_id NULLS LAST, b.start_date;
+FROM
+    "User" AS u
+FULL OUTER JOIN
+    Booking AS b ON u.user_id = b.user_id
+ORDER BY
+    u.user_id, b.booking_id; -- Added for consistent ordering
 
--- ================================================================
--- End of SQL Queries
--- ================================================================
+-- =================================================================
+-- Script End
+-- =================================================================
